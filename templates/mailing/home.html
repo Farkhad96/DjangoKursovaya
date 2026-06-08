@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load cache %}
+
+{% block title %}Главная — Сервис рассылок{% endblock %}
+
+{% block content %}
+<h1>Главная страница</h1>
+<p>Статистика сервиса управления рассылками</p>
+
+{% cache 300 home_stats request.user.id %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="number">{{ total_mailings }}</div>
+        <div class="label">Всего рассылок</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">{{ active_mailings }}</div>
+        <div class="label">Активных рассылок</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">{{ unique_recipients }}</div>
+        <div class="label">Уникальных получателей</div>
+    </div>
+</div>
+{% endcache %}
+
+{% if not user.is_authenticated %}
+<div class="actions" style="margin-top: 30px;">
+    <a href="{% url 'users:register' %}" class="btn btn-primary">Зарегистрироваться</a>
+    <a href="{% url 'users:login' %}" class="btn btn-secondary">Войти</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load cache %}
+
+{% block title %}Статистика{% endblock %}
+
+{% block content %}
+<h1>Статистика рассылок</h1>
+
+{% cache 300 user_stats request.user.id %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="number">{{ total_mailings }}</div>
+        <div class="label">Мои рассылки</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">{{ success_attempts }}</div>
+        <div class="label">Успешных попыток</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">{{ failure_attempts }}</div>
+        <div class="label">Неуспешных попыток</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">{{ total_sent }}</div>
+        <div class="label">Отправленных сообщений</div>
+    </div>
+</div>
+{% endcache %}
+{% endblock %}

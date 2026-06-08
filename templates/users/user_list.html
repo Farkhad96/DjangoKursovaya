@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block content %}
+<h1>Пользователи сервиса</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Имя пользователя</th>
+            <th>Email</th>
+            <th>Email подтверждён</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+                {% if u.profile.email_verified %}
+                    <span class="badge badge-active">Да</span>
+                {% else %}
+                    <span class="badge badge-inactive">Нет</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if u.profile.is_blocked or not u.is_active %}
+                    <span class="badge badge-inactive">Заблокирован</span>
+                {% else %}
+                    <span class="badge badge-active">Активен</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if u != user and u.is_active %}
+                <form method="post" action="{% url 'users:block_user' u.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Заблокировать</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

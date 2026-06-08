@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<h1>Вход в систему</h1>
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">Войти</button>
+            <a href="{% url 'users:register' %}" class="btn btn-secondary">Регистрация</a>
+        </div>
+    </form>
+    <p style="margin-top: 16px;">
+        <a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
+    </p>
+</div>
+{% endblock %}

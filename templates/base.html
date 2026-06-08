@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Сервис рассылок{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a href="{% url 'mailing:home' %}" class="logo">MailingService</a>
+            <ul class="nav-links">
+                <li><a href="{% url 'mailing:home' %}">Главная</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'mailing:recipient_list' %}">Клиенты</a></li>
+                    <li><a href="{% url 'mailing:message_list' %}">Сообщения</a></li>
+                    <li><a href="{% url 'mailing:mailing_list' %}">Рассылки</a></li>
+                    <li><a href="{% url 'mailing:statistics' %}">Статистика</a></li>
+                    {% if is_manager %}
+                        <li><a href="{% url 'users:user_list' %}">Пользователи</a></li>
+                    {% endif %}
+                    <li class="user-info">{{ user.username }} | <a href="{% url 'users:logout' %}">Выйти</a></li>
+                {% else %}
+                    <li><a href="{% url 'users:login' %}">Вход</a></li>
+                    <li><a href="{% url 'users:register' %}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">Курсовой проект — Сервис управления рассылками</div>
+    </footer>
+</body>
+</html>
